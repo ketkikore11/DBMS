@@ -1,0 +1,42 @@
+Create table lib(rollno int, name char(10), dateofissue date, nameofbook char(10), status char(10));
+Create table lib audit(rollno int, name char(10), dateofissue date, nameofbook char(10), status char(10), ts timestamp,command varchar2(10));
+Insert into lib values (101, 'Ram',to
+Insert into lib values (102, 'Sai',to
+Insert into lib values (103, 'Laxman',to
+Insert into lib values (104, 'Sai',to
+Insert into lib values (105, 'Ganesh',to date('20170901
+Select * from lib;
+Select * from lib audit;
+CREATE OR REPLACE TRIGGER ATI
+AFTER INSERT OR DELETE OR UPDATE
+ON lib
+FOR EACH ROW
+BEGIN
+IF UPDATING THEN insert into lib audit values(:old.rollno, :old.name, :old.dateofissue, :old.nameofbook, :old.status, current timestamp, ' UPDATE');
+ELSIF INSERTING THEN insert into lib audit values(:new.rollno, :new.name, :new.dateofissue, :new.nameofbook, :new.status, current timestamp,'INSERT');
+ELSIF DELETING THEN insert into lib audit values(:old.rollno, :old.name, :old.dateofissue, :old.nameofbook, :old.status, current timestamp, 'DELETE');
+END IF;
+END;
+/
+
+ ouTPUT 
+ Insert Operation 
+SQL> Insert into lib  date('20171001  1 row created.
+SQL> select * from lib;
+	ROLLNO NAME 	DATEOFISS NAMEOFBOOK STATUS
+ 
+101	Ram	23-SEP-17 DBMS	1
+102	Sai	10-SEP-17 CN 	1
+103	Laxman 28-SEP-17 TOC	1
+104	Sai	25-AUG-17 SEPM	1
+105	Ganesh Ol-SEP-17 IEEE	1
+106	Gajanan Ol-OCT-17 DDA 1 6 rows selected.
+SQL> select * from lib audit;
+	ROLLNO NAME 	DATEOFISS NAMEOFBOOK STATUS TS COMMAND
+ 
+106 Gajanan Ol-OCT-17 DDA 	1 02-OCT-17 11.12.03.791000PM INSERT SQL>
+ 
+* *Update operation 
+SQL> update lib set nameofbook ='MongoDB' where lib.rollno=101 • 1 row updated.
+SQL> select * from lib;
+	ROLLNO NAME 	DATEOFISS NAMEOFBOOK STATUS
